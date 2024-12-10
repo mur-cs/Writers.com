@@ -1,0 +1,38 @@
+﻿@model FinalProject.ViewModels.AddCommentViewModel
+
+<div class="rate-comment-page">
+    <h2>Оцінка та коментар до: @Model.Name</h2>
+
+    <form method="post" asp-action="SubmitComment" asp-controller="Home">
+        <input type="hidden" name="CompositionId" value="@Model.CompositionId" />
+        <input type="hidden" name="UserId" value="@Model.UserId" />
+
+        <div class="form-group">
+            <label for="Rating">Ваша оцінка (1-5):</label><br />
+            <div>
+                <input type="radio" id="Rating1" name="Rating" value="1" required />
+                <label for="Rating1">1</label>
+
+                <input type="radio" id="Rating2" name="Rating" value="2" required />
+                <label for="Rating2">2</label>
+
+                <input type="radio" id="Rating3" name="Rating" value="3" required />
+                <label for="Rating3">3</label>
+
+                <input type="radio" id="Rating4" name="Rating" value="4" required />
+                <label for="Rating4">4</label>
+
+                <input type="radio" id="Rating5" name="Rating" value="5" required />
+                <label for="Rating5">5</label>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label for="CommentText">Ваш коментар:</label>
+            <textarea id="CommentText" name="CommentText" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success">Надіслати</button>
+    </form>
+</div>

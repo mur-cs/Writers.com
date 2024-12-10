@@ -1,0 +1,107 @@
+﻿@model FinalProject.ViewModels.CompositionDetailsViewModel
+
+<div class="composition-details">
+	<h2>@Model.Name</h2>
+	<p><strong>Жанр:</strong> @Model.Genre</p>
+	<p><strong>Дата публікації:</strong> @Model.PublishDate.ToString("dd.MM.yyyy")</p>
+	@if (Model.Rating==0)
+	{
+		<p><strong>Загальна оцінка:</strong> нема оцінок</p>
+	}
+	else
+	{
+		<p><strong>Загальна оцінка:</strong> @Model.Rating</p>
+	}
+	<p><strong>Автор:</strong> @Model.UserName</p>
+
+	<div class="rate-comment-container">
+		<p>@{
+				var user = Context.Session.GetString("UserName");
+			}</p>
+		@if (ViewBag.IsAlreadyRated)
+		{
+			<p><strong>Ваша оцінка:</strong>@ViewBag.Rate</p>
+			<p><strong>Ваш коментар:</strong>@ViewBag.Text</p>
+		}
+		else if (Context.Session.GetString("UserName")=="" || Context.Session.GetString("UserName")==null)
+		{
+				<span class="pagination-button disabled">Ви не авторизовані. Увійдіть, щоб залишити відгук</span>
+		}
+		else if (Context.Session.GetString("UserName")!=null)
+		{
+			if (Context.Session.GetString("UserName").ToLower()==Model.UserName.ToLower())
+			{
+				<p><strong>Ваша оцінка:</strong>ви не можете оцінити свій твір</p>
+				<span class="pagination-button disabled">Оцінити та додати коментар</span>
+			}
+		}
+		else
+		{
+			<a asp-controller="Home" asp-action="AddComment" asp-route-id="@Model.Id" class="btn btn-primary">
+				Оцінити та додати коментар
+			</a>
+		}
+
+	</div>
+
+	<div class="composition-text">
+		<p>@Model.Text</p>
+	</div>
+
+	<div class="pagination-container">
+		@if (Model.CurrentPage > 1)
+		{
+			<a asp-controller="Home" asp-action="Composition" asp-route-id="@Model.Id" asp-route-page="@(Model.CurrentPage-1)" asp-route-act="previous" class="pagination-button">Попередня</a>
+		}
+		else
+		{
+			<span class="pagination-button disabled">Попередня</span>
+		}
+
+		@for (var i = 1; i <= Model.TotalPages; i++)
+		{
+			if (i == Model.CurrentPage)
+			{
+				<span class="pagination-number active">@i</span>
+			}
+			else
+			{
+				<a asp-controller="Home" asp-action="Composition" asp-route-id="@Model.Id" asp-route-page="@i" asp-route-act="choice" class="pagination-number">@i</a>
+			}
+		}
+
+		@if (Model.CurrentPage < Model.TotalPages)
+		{
+			<a asp-controller="Home" asp-action="Composition" asp-route-id="@Model.Id" asp-route-page="@(Model.CurrentPage+1)" asp-route-act="next" class="pagination-button">Наступна</a>
+		}
+		else
+		{
+			<span class="pagination-button disabled">Наступна</span>
+		}
+	</div>
+
+
+	<div>
+		<h3>Відгуки:</h3>
+		@if (Model.Comments != null && Model.Comments.Any())
+		{
+			@foreach (var comment in Model.Comments)
+			{
+				<div class="card mb-3">
+					<div class="card-body">
+						<h5 class="card-title">@comment.User?.UserName</h5>
+						<p class="card-text">@comment.Text</p>
+						<footer class="blockquote-footer">
+							Оцінка: @comment.Rating
+						</footer>
+					</div>
+				</div>
+			}
+		}
+		else
+		{
+			<p>Наразі немає відгуків. Будьте першим!</p>
+		}
+	</div>
+</div>
+

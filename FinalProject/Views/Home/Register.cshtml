@@ -1,0 +1,72 @@
+﻿@model FinalProject.Models.User
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">Реєстрація</h2>
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+            }
+            <form asp-action="Register" method="post">
+                <div class="form-group">
+                    <label asp-for="UserName">Ім'я користувача</label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" type="email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Пароль</label>
+                    <div class="input-group">
+                        <input asp-for="Password" id="Password" type="password" class="form-control" />
+                        <div class="input-group-append">
+                            <button type="button" id="togglePassword" class="btn btn-outline-secondary">Показати</button>
+                        </div>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ConfirmPassword">Підтвердження паролю</label>
+                    <div class="input-group">
+                        <input asp-for="ConfirmPassword" id="ConfirmPassword" type="password" class="form-control" />
+                        <div class="input-group-append">
+                            <button type="button" id="toggleConfirmPassword" class="btn btn-outline-secondary">Показати</button>
+                        </div>
+                    </div>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="d-flex justify-content-between mt-3">
+                    <button type="submit" class="btn btn-success">Зареєструватися</button>
+                    <a asp-action="Login" class="btn btn-secondary">Повернутися до входу</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function togglePasswordVisibility(inputId, toggleButtonId) {
+            const passwordField = document.getElementById(inputId);
+            const toggleButton = document.getElementById(toggleButtonId);
+
+            toggleButton.addEventListener('click', function () {
+                const type = passwordField.type === 'password' ? 'text' : 'password';
+                passwordField.type = type;
+                toggleButton.textContent = type === 'password' ? 'Показати' : 'Сховати';
+            });
+        }
+        togglePasswordVisibility('Password', 'togglePassword');
+        togglePasswordVisibility('ConfirmPassword', 'toggleConfirmPassword');
+    </script>
+}

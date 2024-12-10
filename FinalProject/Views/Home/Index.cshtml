@@ -1,0 +1,93 @@
+﻿@model IEnumerable<FinalProject.Models.Composition>
+
+<h2>Список творів</h2>
+
+<form asp-controller="Home" asp-action="Index" method="get" class="mb-4">
+	<div class="form-row">
+		<div class="col">
+			<input type="text" name="searchAuthor" class="form-control" placeholder="Автор" value="@ViewData["searchAuthor"]" />
+		</div>
+		<div class="col">
+			<input type="text" name="searchTitle" class="form-control" placeholder="Назва" value="@ViewData["searchTitle"]" />
+		</div>
+		<div class="col">
+			<select name="searchGenre" class="form-control">
+				<option value="">Обрати жанр</option>
+				@foreach (var genre in Enum.GetValues(typeof(FinalProject.Models.Genre)))
+				{
+					if (ViewData["searchGenre"]?.ToString() == genre.ToString())
+					{
+						<option value="@genre" selected>@genre</option>
+					}
+					else
+					{
+						<option value="@genre">@genre</option>
+					}
+				}
+			</select>
+
+
+		</div>
+
+		<div class="col">
+			<select name="filterType" class="form-control">
+				<option value="">Обрати фільтрацію</option>
+				@foreach (var filter in new[] {
+				new { Value = "ratingDesc", Text = "За зниженням оцінки" },
+				new { Value = "ratingAsc", Text = "За збільшенням оцінки" }
+				})
+				{
+					if (ViewData["filterType"]?.ToString() == filter.Value)
+					{
+						<option value="@filter.Value" selected>@filter.Text</option>
+					}
+					else
+					{
+						<option value="@filter.Value">@filter.Text</option>
+					}
+				}
+			</select>
+
+		</div>
+
+		<div class="col">
+			<button type="submit" class="btn btn-primary">Пошук</button>
+		</div>
+	</div>
+</form>
+
+<div class="container">
+	<div class="row">
+		@if (!Model.Any())
+		{
+			<p>Жодного твору не знайдено.</p>
+		}
+		else
+		{
+			@foreach (var composition in Model)
+			{
+				<div class="col-md-3 mb-4">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">
+								<a asp-controller="Home" asp-action="Composition" asp-route-id="@composition.Id" target="_blank">
+									@composition.Name
+								</a>
+							</h5>
+							<p class="card-text">Дата публікації: @composition.PublishDate.ToString("dd.MM.yyyy")</p>
+							<p class="card-text">Жанр: @composition.Genre.ToString()</p>
+							@if (composition.Rating==0)
+							{
+								<p class="card-text">Оцінка: поки що без оцінок</p>
+							}
+							else
+							{
+								<p class="card-text">Оцінка: @composition.Rating.ToString()</p>
+							}
+						</div>
+					</div>
+				</div>
+			}
+		}
+	</div>
+</div>

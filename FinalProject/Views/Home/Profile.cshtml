@@ -1,0 +1,66 @@
+﻿@model User
+
+<div class="row">
+    <div class="col-md-8">
+        <h2>Мій профіль</h2>
+        <form method="post" asp-action="UpdateProfile" asp-controller="Home">
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            <div class="form-group">
+                <label for="UserName">Ім'я користувача</label>
+                <input type="text" class="form-control" id="UserName" name="UserName" value="@Model.UserName" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="Password">Password</label>
+                <input type="Password" class="form-control" id="Password" name="Password" value="@Model.Password" readonly />
+            </div>
+
+            <button type="button" class="btn btn-primary" id="editButton">Редагувати</button>
+            <button type="submit" class="btn btn-success" id="saveButton" style="display: none;">Зберегти зміни</button>
+        </form>
+
+        <form method="post" asp-action="DeleteUser" asp-controller="Home" style="display: inline-block;" onsubmit="return confirm('Ви впевнені, що хочете видалити свій профіль?');">
+            <button type="submit" class="btn btn-danger">Видалити профіль</button>
+        </form>
+
+
+        <h3>Мої твори</h3>
+        <ul class="list-group">
+            @foreach (var composition in Model.Compositions)
+            {
+                <li class="list-group-item">
+                    <strong><a href="/Home/Composition/@composition.Id">@composition.Name</a></strong> <br />
+                    <small>Дата публікації: @composition.PublishDate.ToString("dd.MM.yyyy")</small>
+                </li>
+            }
+        </ul>
+    </div>
+
+    <div class="col-md-4">
+        <h3>Мої коментарі</h3>
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="card mb-2">
+                <div class="card-body">
+                    <p class="card-text">@comment.Text</p>
+                    <footer class="blockquote-footer">До твору: @comment.Composition?.Name</footer>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    document.getElementById("editButton").addEventListener("click", function () {
+        document.querySelectorAll("input").forEach(input => input.removeAttribute("readonly"));
+        document.getElementById("editButton").style.display = "none";
+        document.getElementById("saveButton").style.display = "inline-block";
+    });
+
+
+</script>
