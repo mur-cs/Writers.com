@@ -27,13 +27,10 @@
 		{
 				<span class="pagination-button disabled">Ви не авторизовані. Увійдіть, щоб залишити відгук</span>
 		}
-		else if (Context.Session.GetString("UserName")!=null)
-		{
-			if (Context.Session.GetString("UserName").ToLower()==Model.UserName.ToLower())
-			{
+		else if (Context.Session.GetString("UserName").ToLower()==Model.UserName.ToLower())
+		{	
 				<p><strong>Ваша оцінка:</strong>ви не можете оцінити свій твір</p>
 				<span class="pagination-button disabled">Оцінити та додати коментар</span>
-			}
 		}
 		else
 		{

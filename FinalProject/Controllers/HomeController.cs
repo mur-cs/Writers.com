@@ -151,6 +151,7 @@ namespace FinalProject.Controllers
 		[HttpPost]
 		public IActionResult Publish(Composition model)
 		{
+			model.Comments=new List<Comment>();
 			if (ModelState.IsValid)
 			{
 				_compositions.AddComposition(model);
