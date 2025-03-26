@@ -194,6 +194,17 @@ namespace FinalProject.Controllers
 				compositions = compositions.Where(c => c.Genre.ToString() == searchGenre);
 			}
 
+			decimal rating = 0;
+			foreach (var composition in compositions)
+			{
+				var ratings = _comments.GetCommentsByComposition(composition.Id);
+				if (ratings.Count()!=0)
+				{
+					rating = ratings.Sum(c => c.Rating)/ratings.Count();
+				}
+				composition.Rating=rating;
+			}
+
 			switch (filterType)
 			{
 				case "ratingDesc":
@@ -218,7 +229,7 @@ namespace FinalProject.Controllers
 		public IActionResult Composition(string id, int page = 1)
 		{
 			var composition = _compositions.GetComposition(id);
-			if(page==0)
+			if (page==0)
 			{
 				page=1;
 			}

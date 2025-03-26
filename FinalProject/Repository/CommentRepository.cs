@@ -20,9 +20,9 @@ namespace FinalProject.Repository
 
         public IEnumerable<Comment> GetCommentsByComposition(string compositionId)
         {
-            var comments = _context.Comments.Where(x=>x.Id == compositionId).ToList();
+            var comments = _context.Comments.Where(x=>x.CompositionId == compositionId).ToList();
 
-            if(comments.Any())
+            if(!comments.Any())
             {
                 comments = new List<Comment>();
             }
